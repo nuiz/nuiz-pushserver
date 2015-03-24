@@ -33,7 +33,7 @@ console.log("http server listening on %d", port);
 //});
 
 
-//status = wait_technician, wait_comfirm
+//status = wait_technician, take
 
 
 //var Client = (function(){
@@ -87,7 +87,8 @@ var TaskEntity = (function(){
             "_id": this._id,
             "name": this.name,
             "description": this.description,
-            "status": this.status
+            "status": this.status,
+            "technician": this.technician
         };
     };
 
@@ -98,6 +99,7 @@ var TaskEntity = (function(){
         newEntity.name = name;
         newEntity.description = description;
         newEntity.status = "wait_technician";
+        newEntity.technician = null;
 
         return newEntity;
     };
@@ -110,6 +112,7 @@ var TaskEntity = (function(){
         newEntity.name = jsonObj.name;
         newEntity.description = jsonObj.description;
         newEntity.status = jsonObj.status;
+        newEntity.technician = json.technician? json.technician: null;
 
         return newEntity;
     };
@@ -133,6 +136,15 @@ var TaskCollection = (function(){
         return null;
     };
 
+    TaskCollection.prototype.replace = function(_id, task){
+        for(var i =0; i<arr.length; i++){
+            if(arr[i]._id == _id){
+                arr[i] = task;
+                break;
+            }
+        }
+    };
+
     TaskCollection.prototype.remove = function(_id){
         for(var i =0; i<arr.length; i++){
             if(arr[i]._id == _id)
@@ -153,16 +165,36 @@ var TaskCollection = (function(){
     return new TaskCollection();
 })();
 
+// generate 5 task for test
+TaskCollection.add(TaskEntity.create("test 1", "des 1"));
+TaskCollection.add(TaskEntity.create("test 2", "des 2"));
+TaskCollection.add(TaskEntity.create("test 3", "des 3"));
+TaskCollection.add(TaskEntity.create("test 4", "des 4"));
+TaskCollection.add(TaskEntity.create("test 5", "des 5"));
+
 var io = require("socket.io")(server);
 
 io.on("connection", function(socket){
+    console.log("user connect", TaskCollection.getAttr());
     // emit update for init list
     socket.emit("update", TaskCollection.getAttr());
 
-    socket.on("addTask", function(from, msg){
-        var obj = JSON.stringify(msg);
+    socket.on("addTask", function(obj){
         var task = TaskEntity.create(obj.name, obj.description);
         TaskCollection.add(task);
+
+        io.emit("update", TaskCollection.getAttr());
+    });
+
+    socket.on("removeTask", function(obj){
+        TaskCollection.remove(obj._id);
+        io.emit("update", TaskCollection.getAttr());
+    });
+
+    socket.on("takeTask", function(obj){
+        var task = TaskCollection.find(obj.taskId);
+        task.technician = {"name": obj.technician.name};
+        task.status = "take";
 
         io.emit("update", TaskCollection.getAttr());
     });

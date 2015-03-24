@@ -18,6 +18,11 @@
     <script src="app/manager.js"></script>
 </head>
 <body>
+<style>
+    .take {
+        background: burlywood;
+    }
+</style>
 <div class="container">
     <div ng-app="manager-app" ng-controller="TaskController">
         <div class="row">
@@ -27,15 +32,17 @@
                     <tr>
                         <th>Task Name</th>
                         <th>Status</th>
+                        <th>Technician</th>
                         <th></th>
                     </tr>
                     </thead>
                     <tbody>
-                    <tr ng-repeat="task in tasks">
+                    <tr ng-repeat="task in tasks" ng-class="task.status">
                         <td>{{task.name}}</td>
                         <td>{{task.status}}</td>
+                        <td>{{task.technician.name}}</td>
                         <td>
-                            <button type="button" class="btn btn-danger">delete</button>
+                            <button type="button" class="btn btn-danger" ng-click="removeTask(task)">delete</button>
                         </td>
                     </tr>
                     </tbody>
@@ -47,11 +54,11 @@
                 <form ng-submit="addTask()">
                     <div class="form-group">
                         <label>Name</label>
-                        <input type="text" class="form-control" name="name" placeholder="Task name">
+                        <input type="text" class="form-control" name="name" placeholder="Task name" ng-model="addTaskForm.name">
                     </div>
                     <div class="form-group">
                         <label>Description</label>
-                        <textarea class="form-control" name="description" placeholder="Task description"></textarea>
+                        <textarea class="form-control" name="description" placeholder="Task description" ng-model="addTaskForm.description"></textarea>
                     </div>
                     <button type="submit" class="btn btn-primary">Submit</button>
                 </form>

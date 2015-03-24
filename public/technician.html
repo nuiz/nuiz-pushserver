@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Pub/Sub - Technician</title>
+
+    <script src="//code.jquery.com/jquery-1.11.2.min.js"></script>
+    <script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular.min.js"></script>
+    <script src="app/technician.js"></script>
+</head>
+<body>
+<style>
+    body {
+        background: #323232;
+        color: white;
+    }
+
+    div {
+        min-width: 13em;
+        margin: 1em auto;
+    }
+
+    p {
+        font-family: helvetica;
+        font-size: 1.4em;
+        font-weight: bold;
+    }
+
+    .post-it-note {
+        padding: 2em;
+        background: #ffd707;
+        position: relative;
+        min-height: 10em;
+    }
+
+    .post-it-note:after {
+        content: "";
+        position: absolute;
+        bottom: -2em;
+        left: 0;
+        right: 2em;
+        border-width: 1em;
+        border-style: solid;
+        border-color: #ffd707;
+    }
+
+    .post-it-note:before {
+        content: "";
+        position: absolute;
+        bottom: -2em;
+        right: 0;
+        border-width: 2em 2em 0 0;
+        border-style: solid;
+        border-color: #d3b100 transparent;
+    }
+
+    .task {
+        float: left;
+        color: black;
+        margin: 20px 10px;
+        cursor: pointer;
+    }
+
+    .take {
+        background: burlywood;
+    }
+
+    .take.post-it-note:after {
+        content: "";
+        position: absolute;
+        bottom: -2em;
+        left: 0;
+        right: 2em;
+        border-width: 1em;
+        border-style: solid;
+        border-color: burlywood;
+    }
+
+    .take.post-it-note:before {
+        content: "";
+        position: absolute;
+        bottom: -2em;
+        right: 0;
+        border-width: 2em 2em 0 0;
+        border-style: solid;
+        border-color: #dea16e transparent;
+    }
+</style>
+<div class="container">
+    <div ng-app="technician-app" ng-controller="TaskController">
+        <div class="row" ng-hide="isLogin" style="width: 20%; margin: 0 auto;">
+            <form ng-submit="login()">
+                <div class="form-group">
+                    <label>Your name</label>
+                    <input type="text" class="form-control" name="name" placeholder="Your name" ng-model="loginForm.name">
+                </div>
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+        </div>
+        <div class="row" ng-show="isLogin">
+            <h3>{{name}}</h3>
+            <small>click for take task</small>
+            <div class="task-list">
+                <div class="task post-it-note" ng-repeat="task in tasks" ng-class="task.status" ng-click="takeTask(task)">
+                    <strong class="name">{{task.name}}</strong>
+                    <p class="description">{{task.description}}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
