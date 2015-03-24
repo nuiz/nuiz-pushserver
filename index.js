@@ -1,6 +1,9 @@
 /**
  * Created by NUIZ on 24/3/2558.
  */
+
+"use strict";
+
 var http = require("http");
 var express = require("express");
 var app = express();
@@ -69,109 +72,109 @@ console.log("http server listening on %d", port);
 //    return TaskEntity;
 //})();
 
-//var TaskEntity = (function(){
-//    var autoId = 0;
-//
-//    function getAutoId(){
-//        autoId++;
-//        return autoId;
-//    }
-//
-//    function TaskEntity(){}
-//
-//    TaskEntity.prototype.getAttr = function(){
-//        return {
-//            "_id": this._id,
-//            "name": this.name,
-//            "description": this.description,
-//            "status": this.status
-//        };
-//    };
-//
-//    TaskEntity.create = function(name, description){
-//        var newEntity = new TaskEntity();
-//
-//        newEntity._id = getAutoId();
-//        newEntity.name = name;
-//        newEntity.description = description;
-//        newEntity.status = "wait_technician";
-//
-//        return newEntity;
-//    };
-//
-//    TaskEntity.loadFromJson = function(json){
-//        var jsonObj = JSON.parse(json);
-//
-//        var newEntity = new TaskEntity();
-//        newEntity._id = jsonObj._id;
-//        newEntity.name = jsonObj.name;
-//        newEntity.description = jsonObj.description;
-//        newEntity.status = jsonObj.status;
-//
-//        return newEntity;
-//    };
-//    return TaskEntity;
-//})();
-//
-//var TaskCollection = (function(){
-//    function TaskCollection(){}
-//
-//    var arr = [];
-//
-//    TaskCollection.prototype.add = function(taskEntity){
-//        arr.push(taskEntity);
-//    };
-//
-//    TaskCollection.prototype.find = function(_id){
-//        for(var i =0; i<arr.length; i++){
-//            if(arr[i]._id == _id)
-//                return arr[i];
-//        }
-//        return null;
-//    };
-//
-//    TaskCollection.prototype.remove = function(_id){
-//        for(var i =0; i<arr.length; i++){
-//            if(arr[i]._id == _id)
-//                arr.splice(i, 1);
-//        }
-//        return null;
-//    };
-//
-//    TaskCollection.prototype.getAttr = function(){
-//        var arrReturn = [];
-//        for(var i =0; i<arr.length;i++){
-//            arrReturn.push(arr[i].getAttr());
-//        }
-//
-//        return arrReturn;
-//    };
-//
-//    return new TaskCollection();
-//})();
-//
-//var io = require("socket.io")(server);
-//io.set("transports", ["xhr-polling"]);
-//io.set("polling duration", 10);
-//
-//io.on("connection", function(socket){
-//    io.emit("update", TaskCollection.getAttr());
-//    socket.on("addTask", function(from, msg){
-//        var obj = JSON.stringify(msg);
-//        var task = TaskEntity.create(obj.name, obj.description);
-//        TaskCollection.add(task);
-//
-//        io.emit("update", TaskCollection.getAttr());
-//    });
-//});
-//
-//var interValCount = 0;
-//setInterval(function(){
-//    interValCount++;
-//
-//    var task = TaskEntity.create("test name "+interValCount, "test description "+interValCount);
-//    TaskCollection.add(task);
-//
-//    console.log(JSON.stringify(TaskCollection.getAttr()));
-//    io.emit("update", JSON.stringify(TaskCollection.getAttr()));
-//}, 3000);
+var TaskEntity = (function(){
+    var autoId = 0;
+
+    function getAutoId(){
+        autoId++;
+        return autoId;
+    }
+
+    function TaskEntity(){}
+
+    TaskEntity.prototype.getAttr = function(){
+        return {
+            "_id": this._id,
+            "name": this.name,
+            "description": this.description,
+            "status": this.status
+        };
+    };
+
+    TaskEntity.create = function(name, description){
+        var newEntity = new TaskEntity();
+
+        newEntity._id = getAutoId();
+        newEntity.name = name;
+        newEntity.description = description;
+        newEntity.status = "wait_technician";
+
+        return newEntity;
+    };
+
+    TaskEntity.loadFromJson = function(json){
+        var jsonObj = JSON.parse(json);
+
+        var newEntity = new TaskEntity();
+        newEntity._id = jsonObj._id;
+        newEntity.name = jsonObj.name;
+        newEntity.description = jsonObj.description;
+        newEntity.status = jsonObj.status;
+
+        return newEntity;
+    };
+    return TaskEntity;
+})();
+
+var TaskCollection = (function(){
+    function TaskCollection(){}
+
+    var arr = [];
+
+    TaskCollection.prototype.add = function(taskEntity){
+        arr.push(taskEntity);
+    };
+
+    TaskCollection.prototype.find = function(_id){
+        for(var i =0; i<arr.length; i++){
+            if(arr[i]._id == _id)
+                return arr[i];
+        }
+        return null;
+    };
+
+    TaskCollection.prototype.remove = function(_id){
+        for(var i =0; i<arr.length; i++){
+            if(arr[i]._id == _id)
+                arr.splice(i, 1);
+        }
+        return null;
+    };
+
+    TaskCollection.prototype.getAttr = function(){
+        var arrReturn = [];
+        for(var i =0; i<arr.length;i++){
+            arrReturn.push(arr[i].getAttr());
+        }
+
+        return arrReturn;
+    };
+
+    return new TaskCollection();
+})();
+
+var io = require("socket.io")(server);
+io.set("transports", ["xhr-polling"]);
+io.set("polling duration", 10);
+
+io.on("connection", function(socket){
+    io.emit("update", TaskCollection.getAttr());
+    socket.on("addTask", function(from, msg){
+        var obj = JSON.stringify(msg);
+        var task = TaskEntity.create(obj.name, obj.description);
+        TaskCollection.add(task);
+
+        io.emit("update", TaskCollection.getAttr());
+    });
+});
+
+var interValCount = 0;
+setInterval(function(){
+    interValCount++;
+
+    var task = TaskEntity.create("test name "+interValCount, "test description "+interValCount);
+    TaskCollection.add(task);
+
+    console.log(JSON.stringify(TaskCollection.getAttr()));
+    io.emit("update", JSON.stringify(TaskCollection.getAttr()));
+}, 3000);
