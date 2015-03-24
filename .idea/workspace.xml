@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="272c7b3f-ee73-4027-8bce-d65e5cdfab76" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/index.js" afterPath="$PROJECT_DIR$/index.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="pushserver.iws" />
@@ -398,7 +397,13 @@
       <option name="project" value="LOCAL" />
       <updated>1427196218778</updated>
     </task>
-    <option name="localTasksCounter" value="13" />
+    <task id="LOCAL-00013" summary="remove interval add task">
+      <created>1427196361377</created>
+      <option name="number" value="00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1427196361377</updated>
+    </task>
+    <option name="localTasksCounter" value="14" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -450,7 +455,8 @@
     <MESSAGE value="fix" />
     <MESSAGE value="fix location socket" />
     <MESSAGE value="fix Transport unknown" />
-    <option name="LAST_COMMIT_MESSAGE" value="fix Transport unknown" />
+    <MESSAGE value="remove interval add task" />
+    <option name="LAST_COMMIT_MESSAGE" value="remove interval add task" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager />
