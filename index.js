@@ -156,7 +156,9 @@ var TaskCollection = (function(){
 var io = require("socket.io")(server);
 
 io.on("connection", function(socket){
-    io.emit("update", TaskCollection.getAttr());
+    // emit update for init list
+    socket.emit("update", TaskCollection.getAttr());
+
     socket.on("addTask", function(from, msg){
         var obj = JSON.stringify(msg);
         var task = TaskEntity.create(obj.name, obj.description);
