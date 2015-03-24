@@ -165,14 +165,3 @@ io.on("connection", function(socket){
         io.emit("update", TaskCollection.getAttr());
     });
 });
-
-var interValCount = 0;
-setInterval(function(){
-    interValCount++;
-
-    var task = TaskEntity.create("test name "+interValCount, "test description "+interValCount);
-    TaskCollection.add(task);
-
-    console.log(JSON.stringify(TaskCollection.getAttr()));
-    io.emit("update", JSON.stringify(TaskCollection.getAttr()));
-}, 3000);
