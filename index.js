@@ -34,41 +34,41 @@ console.log("http server listening on %d", port);
 status = wait_technician, wait_comfirm
  */
 
-var Client = (function(){
-    var autoId = 0;
-
-    function getAutoId(){
-        autoId++;
-        return autoId;
-    }
-
-    function TaskEntity(name, description){
-        this._id = getAutoId();
-        this.name = name;
-        this.description = description;
-        this.status = "wait_technician";
-    }
-
-    return TaskEntity;
-})();
-
-var ClientCollection = (function(){
-    var autoId = 0;
-
-    function getAutoId(){
-        autoId++;
-        return autoId;
-    }
-
-    function TaskEntity(name, description){
-        this._id = getAutoId();
-        this.name = name;
-        this.description = description;
-        this.status = "wait_technician";
-    }
-
-    return TaskEntity;
-})();
+//var Client = (function(){
+//    var autoId = 0;
+//
+//    function getAutoId(){
+//        autoId++;
+//        return autoId;
+//    }
+//
+//    function TaskEntity(name, description){
+//        this._id = getAutoId();
+//        this.name = name;
+//        this.description = description;
+//        this.status = "wait_technician";
+//    }
+//
+//    return TaskEntity;
+//})();
+//
+//var ClientCollection = (function(){
+//    var autoId = 0;
+//
+//    function getAutoId(){
+//        autoId++;
+//        return autoId;
+//    }
+//
+//    function TaskEntity(name, description){
+//        this._id = getAutoId();
+//        this.name = name;
+//        this.description = description;
+//        this.status = "wait_technician";
+//    }
+//
+//    return TaskEntity;
+//})();
 
 var TaskEntity = (function(){
     var autoId = 0;
@@ -152,6 +152,9 @@ var TaskCollection = (function(){
 })();
 
 var io = require("socket.io")(server);
+io.set("transports", ["xhr-polling"]);
+io.set("polling duration", 10);
+
 io.on("connection", function(socket){
     io.emit("update", TaskCollection.getAttr());
     socket.on("addTask", function(from, msg){
