@@ -1,7 +1,6 @@
 /**
  * Created by NUIZ on 24/3/2558.
  */
-var WebSocketServer = require("ws").Server;
 var http = require("http");
 var express = require("express");
 var app = express();
@@ -30,9 +29,9 @@ console.log("http server listening on %d", port);
 //    });
 //});
 
-/*
-status = wait_technician, wait_comfirm
- */
+
+//status = wait_technician, wait_comfirm
+
 
 //var Client = (function(){
 //    var autoId = 0;
